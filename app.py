@@ -16,9 +16,12 @@ def gerar_pdf():
         browser = p.chromium.launch()
         page = browser.new_page()
         page.goto(url, wait_until="networkidle")
-        page.wait_for_timeout(3000)  # Espera 3 segundos para garantir o carregamento completo
-
+        page.wait_for_timeout(3000)
         page.pdf(path=pdf_path, format="A4", print_background=True)
         browser.close()
 
     return send_file(pdf_path, as_attachment=True, download_name="painel.pdf")
+
+@app.route('/')
+def home():
+    return '🟢 API para gerar PDF do painel está rodando!'
