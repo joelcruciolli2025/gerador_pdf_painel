@@ -4,10 +4,14 @@ import tempfile
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return '✅ API rodando. Envie POST para /gerar-pdf com {"url": "https://..."}'
+
 @app.route('/gerar-pdf', methods=['POST'])
 def gerar_pdf():
     data = request.get_json()
-    url = data['url']
+    url = data.get('url')
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as tmpfile:
         pdf_path = tmpfile.name
@@ -21,7 +25,3 @@ def gerar_pdf():
         browser.close()
 
     return send_file(pdf_path, as_attachment=True, download_name="painel.pdf")
-
-@app.route('/')
-def home():
-    return '🟢 API para gerar PDF do painel está rodando!'
